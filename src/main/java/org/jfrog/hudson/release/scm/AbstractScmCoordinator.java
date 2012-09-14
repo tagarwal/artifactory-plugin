@@ -23,6 +23,7 @@ import hudson.model.BuildListener;
 import hudson.scm.SCM;
 import hudson.scm.SubversionSCM;
 import org.jfrog.hudson.release.ReleaseAction;
+import org.jfrog.hudson.release.scm.ade.AdeCoordinator;
 import org.jfrog.hudson.release.scm.git.GitCoordinator;
 import org.jfrog.hudson.release.scm.perforce.PerforceCoordinator;
 import org.jfrog.hudson.release.scm.svn.SubversionCoordinator;
@@ -60,6 +61,10 @@ public abstract class AbstractScmCoordinator implements ScmCoordinator {
         if (isPerforceScm(build.getProject())) {
             return new PerforceCoordinator(build, listener, releaseAction);
         }
+        // ADE is optional as well :)
+        if (isAdeScm(build.getProject())) {
+        	return new AdeCoordinator(build, listener, releaseAction);
+        }
         throw new UnsupportedOperationException(
                 "Scm of type: " + projectScm.getClass().getName() + " is not supported");
     }
@@ -81,6 +86,14 @@ public abstract class AbstractScmCoordinator implements ScmCoordinator {
         SCM scm = project.getScm();
         if (scm != null) {
             return scm.getClass().getName().equals("hudson.plugins.perforce.PerforceSCM");
+        }
+        return false;
+    }
+
+    public static boolean isAdeScm(AbstractProject project) {
+        SCM scm = project.getScm();
+        if (scm != null) {
+            return scm.getClass().getName().equals("org.jvnet.hudson.plugins.ade.AdeSCM");
         }
         return false;
     }

@@ -15,20 +15,26 @@
 
 package org.jfrog.hudson.release;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import hudson.model.AbstractBuild;
-import hudson.model.Hudson;
 import hudson.model.BuildBadgeAction;
-import hudson.model.TaskAction;
 import hudson.model.TaskListener;
 import hudson.model.TaskThread;
+import hudson.model.AbstractBuild;
+import hudson.model.Hudson;
+import hudson.model.TaskAction;
 import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.Permission;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
@@ -48,11 +54,9 @@ import org.jfrog.hudson.util.ExtractorUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * This badge action is added to a successful staged builds. It allows performing additional promotion.
@@ -247,7 +251,7 @@ public class UnifiedPromoteBuildAction<C extends BuildInfoAwareConfigurator & De
         private final String ciUser;
 
         public PromoteWorkerThread(ArtifactoryServer artifactoryServer, Credentials deployer, String ciUser) {
-            super(UnifiedPromoteBuildAction.this, ListenerAndText.forMemory(null));
+            super(UnifiedPromoteBuildAction.this, ListenerAndText.forMemory());
             this.artifactoryServer = artifactoryServer;
             this.deployer = deployer;
             this.ciUser = ciUser;
