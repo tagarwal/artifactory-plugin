@@ -228,9 +228,6 @@ public class ArtifactsDeployer {
      */
     private File getArtifactFile(MavenBuild build, MavenArtifact mavenArtifact) throws IOException {
         String fileName = mavenArtifact.fileName;
-//        if (isArchiveJenkinsVersion && !fileName.equals("pom.xml")) {
-//            fileName = mavenArtifact.canonicalName;
-//        }
         File file = new File(new File(new File(new File(build.getArtifactsDir(), mavenArtifact.groupId),
                 mavenArtifact.artifactId), mavenArtifact.version), fileName);
         if (!file.exists()) {

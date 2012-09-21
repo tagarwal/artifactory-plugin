@@ -16,13 +16,16 @@
 
 package org.jfrog.hudson.action;
 
+import com.google.common.collect.Lists;
 import hudson.maven.MavenBuild;
 import hudson.maven.reporters.MavenArtifactRecord;
-import hudson.model.Action;
-import hudson.model.BuildableItemWithBuildWrappers;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Action;
+import hudson.model.BuildableItemWithBuildWrappers;
 import hudson.model.Cause;
+import hudson.model.User;
+import hudson.model.Cause.UserCause;
 import hudson.model.CauseAction;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
@@ -31,13 +34,12 @@ import hudson.tasks.BuildWrapper;
 import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
 import hudson.util.DescribableList;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 
-import com.google.common.collect.Lists;
 
 /**
  * @author Yossi Shaul
@@ -139,12 +141,12 @@ public abstract class ActionableHelper {
      * @return The user id caused triggered the build of default principal if not found
      */
     public static String getUserCausePrincipal(AbstractBuild build, String defaultPrincipal) {
-//        Cause.UserIdCause userCause = getUserCause(build);
-//        String principal = defaultPrincipal;
-//        if (userCause != null && userCause.getUserId() != null) {
-//            principal = userCause.getUserId();
-//        }
-        return defaultPrincipal;
+        User u = User.current();
+        String principal = defaultPrincipal;
+        if (u != null && u.getId() != null) {
+            principal = u.getId();
+        }
+        return principal;
     }
 
     private static String getUserCause(AbstractBuild build) {
