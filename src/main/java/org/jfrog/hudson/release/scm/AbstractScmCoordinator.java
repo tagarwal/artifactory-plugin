@@ -17,18 +17,18 @@
 package org.jfrog.hudson.release.scm;
 
 import hudson.FilePath;
+import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.scm.SCM;
 import hudson.scm.SubversionSCM;
+
+import java.io.IOException;
+
 import org.jfrog.hudson.release.ReleaseAction;
-import org.jfrog.hudson.release.scm.ade.AdeCoordinator;
 import org.jfrog.hudson.release.scm.git.GitCoordinator;
 import org.jfrog.hudson.release.scm.perforce.PerforceCoordinator;
 import org.jfrog.hudson.release.scm.svn.SubversionCoordinator;
-
-import java.io.IOException;
 
 /**
  * This class coordinates between the release steps and required scm actions based on the svm manager.
@@ -62,9 +62,9 @@ public abstract class AbstractScmCoordinator implements ScmCoordinator {
             return new PerforceCoordinator(build, listener, releaseAction);
         }
         // ADE is optional as well :)
-        if (isAdeScm(build.getProject())) {
-        	return new AdeCoordinator(build, listener, releaseAction);
-        }
+//        if (isAdeScm(build.getProject())) {
+//        	return new AdeCoordinator(build, listener, releaseAction);
+//        }
         throw new UnsupportedOperationException(
                 "Scm of type: " + projectScm.getClass().getName() + " is not supported");
     }

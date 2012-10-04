@@ -75,11 +75,13 @@
             <artifactId>subversion</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <!-- roll back while we wait for ADE team to release
         <dependency>
             <groupId>org.jvnet.hudson.plugins</groupId>
             <artifactId>ade</artifactId>
-	    <version>1.0-SNAPSHOT</version>
+	        <version>1.0-SNAPSHOT</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.hudsonci.plugins</groupId>
             <artifactId>git</artifactId>
