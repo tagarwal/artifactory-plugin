@@ -88,6 +88,7 @@ public class GenericArtifactsDeployer {
         Map<String, String> properties = Maps.newHashMap();
 
         properties.put("build.name", ExtractorUtils.sanitizeBuildName(build.getParent().getFullName()));
+        properties.put("build.name", ExtractorUtils.sanitizeBuildName(configurator.getBuildInfoName()));
         properties.put("build.number", build.getNumber() + "");
         properties.put("build.timestamp", build.getTimestamp().getTime().getTime() + "");
         Cause.UpstreamCause parent = ActionableHelper.getUpstreamCause(build);

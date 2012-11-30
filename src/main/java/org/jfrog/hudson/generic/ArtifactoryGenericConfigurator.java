@@ -9,6 +9,7 @@ import hudson.model.BuildListener;
 import hudson.model.FreeStyleProject;
 import hudson.model.Hudson;
 import hudson.model.Result;
+import hudson.Util;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import net.sf.json.JSONObject;
@@ -50,6 +51,10 @@ public class ArtifactoryGenericConfigurator extends BuildWrapper implements Depl
     private final String matrixParams;
 
     private final boolean deployBuildInfo;
+    /*
+     * name of the buildinfo that appears in artifactory
+     */
+    private String buildInfoName;
     /**
      * Include environment variables in the generated build info
      */
@@ -62,13 +67,14 @@ public class ArtifactoryGenericConfigurator extends BuildWrapper implements Depl
     @DataBoundConstructor
     public ArtifactoryGenericConfigurator(ServerDetails details, Credentials overridingDeployerCredentials,
             String deployPattern, String resolvePattern, String matrixParams, boolean deployBuildInfo,
-            boolean includeEnvVars, boolean discardOldBuilds, boolean discardBuildArtifacts) {
+            String buildInfoName, boolean includeEnvVars, boolean discardOldBuilds, boolean discardBuildArtifacts) {
         this.details = details;
         this.overridingDeployerCredentials = overridingDeployerCredentials;
         this.deployPattern = deployPattern;
         this.resolvePattern = resolvePattern;
         this.matrixParams = matrixParams;
         this.deployBuildInfo = deployBuildInfo;
+        this.buildInfoName = buildInfoName;
         this.includeEnvVars = includeEnvVars;
         this.discardOldBuilds = discardOldBuilds;
         this.discardBuildArtifacts = discardBuildArtifacts;
@@ -102,6 +108,9 @@ public class ArtifactoryGenericConfigurator extends BuildWrapper implements Depl
         return matrixParams;
     }
 
+    public String getBuildInfoName(){
+    	return buildInfoName;
+    }
     public boolean isIncludeEnvVars() {
         return includeEnvVars;
     }
@@ -166,6 +175,11 @@ public class ArtifactoryGenericConfigurator extends BuildWrapper implements Depl
     public Environment setUp(final AbstractBuild build, Launcher launcher, BuildListener listener)
             throws IOException, InterruptedException {
         final String artifactoryServerName = getArtifactoryName();
+        if (buildInfoName == null || buildInfoName.isEmpty()){
+        	buildInfoName = build.getParent().getName();
+        } else {
+        	buildInfoName = Util.replaceMacro(buildInfoName, build.getEnvironment(listener));
+        }
         if (StringUtils.isBlank(artifactoryServerName)) {
             return super.setUp(build, launcher, listener);
         }

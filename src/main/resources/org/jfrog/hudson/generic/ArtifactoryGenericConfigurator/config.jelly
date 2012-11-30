@@ -60,6 +60,9 @@
                         <f:checkbox default="false" checked="${instance.includeEnvVars}"/>
                         <label class="attach-previous">${%Include all environment variables}</label>
                     </f:entry>
+                    <f:entry title="Name" field="buildInfoName" help="/plugin/artifactory/help/common/help-buildInfoName.html">
+                    	<f:textbox value="${instance.buildInfoName}" />
+                    </f:entry>                    		
                     <f:optionalBlock name="discardOldBuilds"
                                      checked="${instance.discardOldBuilds}"
                                      title="Discard old builds from Artifactory (requires Artifactory Pro)"

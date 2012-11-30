@@ -88,9 +88,10 @@ public class GenericBuildInfoDeployer extends AbstractBuildInfoDeployer {
 
     private void createDeployDetailsAndAddToBuildInfo(List<Artifact> deployedArtifacts,
             List<Dependency> publishedDependencies) throws IOException, NoSuchAlgorithmException {
+    	String buildInfoName = configurator.getBuildInfoName();
         ModuleBuilder moduleBuilder =
                 new ModuleBuilder().id(
-                        ExtractorUtils.sanitizeBuildName(build.getParent().getDisplayName()) + ":" + build.getNumber())
+                        ExtractorUtils.sanitizeBuildName(buildInfoName) + ":" + build.getNumber())
                         .artifacts(deployedArtifacts);
         moduleBuilder.dependencies(publishedDependencies);
         buildInfo.setModules(Lists.newArrayList(moduleBuilder.build()));

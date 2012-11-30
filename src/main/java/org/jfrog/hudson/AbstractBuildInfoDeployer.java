@@ -20,6 +20,7 @@ import org.jfrog.build.api.builder.PromotionStatusBuilder;
 import org.jfrog.build.api.release.Promotion;
 import org.jfrog.build.client.ArtifactoryBuildInfoClient;
 import org.jfrog.hudson.action.ActionableHelper;
+import org.jfrog.hudson.generic.ArtifactoryGenericConfigurator;
 import org.jfrog.hudson.release.ReleaseAction;
 import org.jfrog.hudson.util.BuildRetentionFactory;
 import org.jfrog.hudson.util.ExtractorUtils;
@@ -51,8 +52,12 @@ public class AbstractBuildInfoDeployer {
     }
 
     protected Build createBuildInfo(String buildAgentName, String buildAgentVersion, BuildType buildType) {
+    	String buildinfoName = build.getParent().getFullName();
+    	if (buildAgentName.compareTo("Generic") == 0){
+    		buildinfoName = ((ArtifactoryGenericConfigurator)configurator).getBuildInfoName();
+    	}
         BuildInfoBuilder builder = new BuildInfoBuilder(
-                ExtractorUtils.sanitizeBuildName(build.getParent().getFullName()))
+                ExtractorUtils.sanitizeBuildName(buildinfoName))
                 .number(build.getNumber() + "").type(buildType)
                 .buildAgent(new BuildAgent(buildAgentName, buildAgentVersion))
                 .agent(new Agent("hudson", build.getHudsonVersion()));
