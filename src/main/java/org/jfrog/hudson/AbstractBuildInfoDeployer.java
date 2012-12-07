@@ -3,6 +3,7 @@ package org.jfrog.hudson;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import hudson.EnvVars;
+import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Cause;
@@ -40,7 +41,7 @@ public class AbstractBuildInfoDeployer {
     protected AbstractBuild build;
     protected BuildListener listener;
     protected ArtifactoryBuildInfoClient client;
-    private EnvVars env;
+    protected EnvVars env;
 
     public AbstractBuildInfoDeployer(BuildInfoAwareConfigurator configurator, AbstractBuild build,
             BuildListener listener, ArtifactoryBuildInfoClient client) throws IOException, InterruptedException {
@@ -54,7 +55,7 @@ public class AbstractBuildInfoDeployer {
     protected Build createBuildInfo(String buildAgentName, String buildAgentVersion, BuildType buildType) {
     	String buildinfoName = build.getParent().getFullName();
     	if (buildAgentName.compareTo("Generic") == 0){
-    		buildinfoName = ((ArtifactoryGenericConfigurator)configurator).getBuildInfoName();
+    		buildinfoName = Util.replaceMacro(((ArtifactoryGenericConfigurator)configurator).getBuildInfoName(),env);
     	}
         BuildInfoBuilder builder = new BuildInfoBuilder(
                 ExtractorUtils.sanitizeBuildName(buildinfoName))

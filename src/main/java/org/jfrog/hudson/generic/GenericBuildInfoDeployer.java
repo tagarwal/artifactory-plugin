@@ -18,6 +18,8 @@ package org.jfrog.hudson.generic;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
+import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import org.jfrog.build.api.Artifact;
@@ -88,7 +90,7 @@ public class GenericBuildInfoDeployer extends AbstractBuildInfoDeployer {
 
     private void createDeployDetailsAndAddToBuildInfo(List<Artifact> deployedArtifacts,
             List<Dependency> publishedDependencies) throws IOException, NoSuchAlgorithmException {
-    	String buildInfoName = configurator.getBuildInfoName();
+    	String buildInfoName = Util.replaceMacro(configurator.getBuildInfoName(),env);
         ModuleBuilder moduleBuilder =
                 new ModuleBuilder().id(
                         ExtractorUtils.sanitizeBuildName(buildInfoName) + ":" + build.getNumber())

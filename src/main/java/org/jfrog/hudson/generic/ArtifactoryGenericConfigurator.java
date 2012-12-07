@@ -177,9 +177,8 @@ public class ArtifactoryGenericConfigurator extends BuildWrapper implements Depl
         final String artifactoryServerName = getArtifactoryName();
         if (buildInfoName == null || buildInfoName.isEmpty()){
         	buildInfoName = build.getParent().getName();
-        } else {
-        	buildInfoName = Util.replaceMacro(buildInfoName, build.getEnvironment(listener));
         }
+        
         if (StringUtils.isBlank(artifactoryServerName)) {
             return super.setUp(build, launcher, listener);
         }
